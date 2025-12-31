@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -53,8 +52,6 @@ class InternetHelper extends IBaseClient {
     required String url,
     Map<String, String>? header,
   }) async {
-    // print(url.toString()); // TODO: remove after debugging
-    log(url.toString()); // TODO: remove after debugging
     try {
       final response = await client.get(Uri.parse(url), headers: header);
       if (response.statusCode == 403) {
@@ -69,7 +66,6 @@ class InternetHelper extends IBaseClient {
     } on TimeoutException {
       throw ApiFailure(message: 'Request timed out');
     } catch (e) {
-      log(e.toString());
       throw ApiFailure(message: 'An unexpected error occurred');
     }
   }
