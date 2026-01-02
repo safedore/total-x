@@ -81,13 +81,20 @@ class _AuthScreenState extends State<AuthScreen> {
     final response = await OTPWidget.verifyOTP(data);
     // Handle response {message: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXF1ZXN0SWQiOiIzNTZjNDQ2YTdhNjczODMyMzQzOTM3MzEiLCJjb21wYW55SWQiOjQ4NTI5NX0.IfpeP2_8TTS8YQTrhPswOdMJMNqL3yCJukLax9RaFy4, type: success}
     _loadingNotifier.value = false;
+
     if (response?['message'] != null) {
       PreferenceHelper().setString(
         key: AppPrefKeys.token,
         value: response!['message'],
       );
       if (mounted) {
-        context.go(RouterConstants.bottomNavRoute);
+        if (response['type'] == 'success') {
+          context.go(RouterConstants.bottomNavRoute);
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Invalid Otp')));
+        }
       }
     }
   }

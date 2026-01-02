@@ -30,17 +30,15 @@ class OtpWidget extends StatefulWidget {
 
 class _OtpWidgetState extends State<OtpWidget> {
   Timer? _timer;
-  int _remainingSeconds = 59;
+  final ValueNotifier<int> _remainingSeconds = ValueNotifier(59);
   bool _canResend = false;
   void _startTimer() {
-    _remainingSeconds = 59;
+    _remainingSeconds.value = 59;
     _canResend = false;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
+      if (_remainingSeconds.value > 0) {
         if (mounted) {
-          setState(() {
-            _remainingSeconds--;
-          });
+          _remainingSeconds.value--;
         }
       } else {
         if (mounted) {
@@ -143,12 +141,17 @@ class _OtpWidgetState extends State<OtpWidget> {
                   ),
                 ),
               ] else ...[
-                Text(
-                  '$_remainingSeconds Sec',
-                  style: AppTypography.montserratSemiBold.copyWith(
-                    fontSize: 11,
-                    color: AppColors.redColor,
-                  ),
+                ValueListenableBuilder(
+                  valueListenable: _remainingSeconds,
+                  builder: (context, value, child) {
+                    return Text(
+                      '$value Sec',
+                      style: AppTypography.montserratSemiBold.copyWith(
+                        fontSize: 11,
+                        color: AppColors.redColor,
+                      ),
+                    );
+                  }
                 ),
               ],
             ],

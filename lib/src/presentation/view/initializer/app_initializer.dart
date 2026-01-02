@@ -60,7 +60,7 @@ class _AppInitializerState extends State<AppInitializer> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     if (loginToken.isEmpty ||
         loginToken == 'none' ||
-        loginToken == 'OTP has expired') {
+        loginToken == 'OTP has expired' || loginToken == 'invalid otp') {
       if (mounted) {
         context.read<AuthBloc>().add(SetAuthenticated(isAuthenticated: false));
         context.go(RouterConstants.mainLoginRoute);
